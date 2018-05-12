@@ -11,6 +11,7 @@ defmodule Ecto.Adapters.Airtable.Query do
   def limit(%Ecto.Query{limit: %Ecto.Query.QueryExpr{expr: expr}}), do: expr(expr, [])
   def limit(_), do: nil
 
+  defp fields(nil), do: []
   defp fields(names), do: Enum.map(names -- [:id], &space_camel/1)
 
   def where(query, params \\ [])

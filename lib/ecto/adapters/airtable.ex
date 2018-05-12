@@ -129,6 +129,14 @@ defmodule Ecto.Adapters.Airtable do
     {length(results), results}
   end
 
+  @doc """
+  Matches empty fields for schemaless queries
+  """
+  defp convert(record, [{:&, [], [0, nil, _]} = fd], mapper) do
+    values = Map.merge(record["fields"], %{"id" => record["id"]})
+    [mapper.(fd, values, nil)]
+  end
+
   defp convert(record, [{:&, [], [0, fields, _]} = fd], mapper) do
     values = Enum.map(fields, &get_field(record, &1))
     [mapper.(fd, values, nil)]
